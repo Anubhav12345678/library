@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const bp = require("body-parser");
+const methodOverride = require("method-override");
 const ejs = require("ejs");
 const PORT = process.env.PORT || 3000;
 const expressLayouts = require("express-ejs-layouts");
@@ -46,6 +47,7 @@ app.set("views", __dirname + "/views");
 app.set("layout", "layouts/layout");
 // we want to tell  express app that we want to use express layouts
 app.use(expressLayouts);
+app.use(methodOverride('_method')); // heer wee r tellingg what we want that param to be
 // now we are telling where our static files would be
 app.use(express.static("public")); // css files, html files, images
 // import the router into our server

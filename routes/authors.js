@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const Author = require("../models/author"); // giving access to our author model that we created
 const mongoose = require("mongoose");
+const Book = require("../models/book");
 // All authors route
 router.get("/", async (req, res) => {
 	// WHEN SEARCHING WE GET A REQUEST USING "GET" to this route and a get request sends information throught the query string
@@ -23,7 +24,8 @@ router.get("/", async (req, res) => {
 			authors: authors,
 			searchOptions: req.query,
 		});
-	} catch {
+	} catch (err) {
+		console.log(err);
 		// and if for some reason anything goes wrong or db doesn't respond
 		console.log("MongoDB server is having some error!!");
 		res.redirect("/");
@@ -52,9 +54,88 @@ router.post("/", async (req, res) => {
 			// if we are not getting any author we are  redirecting to the newAuthor's page
 			// res.redirect('authors/' + newAuthor.id);
 			console.log("Author saaved to our database");
-			res.redirect("authors");
+			res.redirect(`/authors/${newAuthor.id}`);
 		}
 	}); // to save the new author to our db
 });
+
+router.get("/:id", async (req, res) => {
+	try {
+		const author = await Author.findById(req.params.id);
+		const booksByAuthor = await Book
+			.find({ author: author.id })
+			.limit(6)
+			.exec();
+		res.render("authors/show", {
+			author: author,
+			booksByAuthor: booksByAuthor,
+		});
+	} catch (err) {
+		console.log(err);
+		console.log("Some error occured in getting the author or its books");
+		res.redirect("/");
+	}
+});
+
+router.get("/:id/edit", async (req, res) => {
+	try {
+		const author = await Author.findById(req.params.id);
+		res.render("authors/edit", { author: author });
+	} catch (err) {
+		console.log(err);
+		console.log(
+			"Some  err occured whiel getting the specific author from db!!"
+		);
+		res.redirect("/authors");
+	}
+});
+
+// update router using rest principles this is done using put
+router.put("/:id", async (req, res) => {
+	// const author = new Author({
+	// 	name: req.body.name,
+	// });
+	let author;
+	try {
+		author = await Author.findById(req.params.id);
+		author.name = req.body.name;
+		await author.save();
+		res.redirect(`/authors/${author.id}`);
+	} catch (err) {
+		console.log(err);
+		if (author == null) {
+			// means we failed in findingg the author from db
+			console.log("Author nhi mila db se");
+			res.redirect("/");
+		} else {
+			res.render("authors/edit", {
+				author: author,
+				errorMessage: "Error updating the Author",
+			});
+		}
+	}
+});
+
+// delete author
+router.delete("/:id", async (req, res) => {
+	let author;
+	try {
+		author = await Author.findById(req.params.id);
+		await author.remove(); // delete the author from our database
+		res.redirect("/authors");
+	} catch (err) {
+		console.log(err);
+		if (author == null) {
+			// means we failed in findingg the author from db
+			console.log("Author del nhi ho paya db se ");
+			res.redirect("/");
+		} else {
+			res.redirect(`/authors/${author.id}`);
+		}
+	}
+});
+
+// we cannot place a put or delete req from our from for that we require a lib method-override, it allows
+//  us to send a additional param with our form that tells our server if it's a put or delete request
 
 module.exports = router;
