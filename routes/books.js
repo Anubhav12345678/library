@@ -81,8 +81,8 @@ router.post("/", async (req, res) => {
 	try {
 		const newBook = await book.save();
 		console.log("Book saved successfully");
-		// res.redirect(`books/${newBook.id}`)
-		res.redirect(`books`);
+		res.redirect(`/books/${newBook.id}`);
+		// res.redirect(`books`);
 	} catch {
 		// console.log(err);
 		console.log("Somme err occured while saving the book!!!");
@@ -93,24 +93,6 @@ router.post("/", async (req, res) => {
 		};
 		res.render("books/new", params);
 	}
-
-	// await book
-	// 	.save()
-	// 	.then((data) => {
-	// 		console.log(data);
-	// 		console.log("Book saved successfully!!!!!");
-	// 		res.redirect("books");
-	// 	})
-	// 	.catch((err) => {
-	// 		// console.log(err);
-	// 		// console.log("Somme err occured while saving the book!!!");
-	// 		// const params = {
-	// 		// 	authors: authors,
-	// 		// 	book: book,
-	// 		// 	errorMessage: "Error creating Book!!",
-	// 		// };
-	// 		// res.render("books/new", params);
-	// 	});
 });
 
 // we got rid of this as we are no longer saving images on our server
@@ -120,6 +102,100 @@ router.post("/", async (req, res) => {
 // 		console.log(err);
 // 	});
 // }
+
+// show book route
+router.get("/:id", async (req, res) => {
+	// without the populate method aothor section of book object will only have an id but populate will populate ffun will
+	// fill the author var with all of the author information
+	try {
+		const book = await Book.findById(req.params.id)
+			.populate("author")
+			.exec();
+		res.render("books/show", { book: book });
+	} catch {
+		res.redirect("/");
+	}
+});
+
+// edit route
+router.get("/:id/edit", async (req, res) => {
+	try {
+		const book = await Book.findById(req.params.id);
+		renderEditPage(res, book);
+	} catch {
+		res.redirect("/");
+	}
+});
+
+async function renderEditPage(res, book, hasError = false) {
+	try {
+		const authors = await Author.find({});
+		const params = {
+			authors: authors,
+			book: book,
+		};
+		if (hasError)
+			params.errorMessage =
+				"Some error occured while calling edit on this book";
+		res.render("books/edit", params);
+	} catch {
+		res.redirect("/books");
+	}
+}
+
+// update page
+router.put("/:id", async (req, res) => {
+	let book = [];
+	try {
+		book = await Book.findById(req.params.id);
+		book.title = req.body.title;
+		book.description = req.body.description;
+		book.publishDate = new Date(req.body.publishDate);
+		book.author = req.body.author;
+		book.pageCount = req.body.pageCount;
+		if (req.body.cover != null && req.body.cover != "") {
+			saveCover(book, req.body.cover);
+		}
+		await book.save();
+		console.log("Book updates successfully");
+		res.redirect(`/books/${book.id}`);
+		// res.redirect(`books`);
+	} catch (err) {
+		console.log(err);
+		console.log("Somme err occured while saving the book!!!");
+		if (book != null) {
+			renderEditPage(res, book, true);
+		} else {
+			res.redirect("/");
+		}
+
+		// const params = {
+		// 	authors: authors,
+		// 	book: book,
+		// 	errorMessage: "Error creating Book!!",
+		// };
+		// res.render("books/new", params);
+	}
+});
+
+// delete book page
+router.delete("/:id", async (req, res) => {
+	let book = [];
+	try {
+		book = await Book.findById(req.params.id);
+		await book.remove();
+		res.redirect("/");
+	} catch {
+		if (book != null) {
+			res.redirect(`/books/${book.id}`, {
+				book: book,
+				errorMessage: "Cannot Delete Book!!",
+			});
+		} else {
+			res.redirect("/");
+		}
+	}
+});
 
 function saveCover(book, coverEncoded) {
 	console.log("Yha gya");
