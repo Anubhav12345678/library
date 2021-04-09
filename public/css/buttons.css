@@ -1,0 +1,63 @@
+:root {
+	--col-btn-primary-background: hsl(200, 100%, 83%);
+	--col-btn-primary-background-dark: hsl(200, 100%, 73%);
+	--col-btn-primary-text: hsl(200, 100%, 20%);
+	--col-btn-primary-text-dark: hsl(200, 100%, 10%);
+	--col-btn-border: black;
+	--col-btn-danger-background: hsl(var(--col-danger-hue), 100%, 83%);
+	--col-btn-danger-background-dark: hsl(var(--col-danger-hue), 100%, 73%);
+	--col-btn-danger-text: black;
+	--col-btn-danger-text-dark: black;
+	/* --col-btn-primary-background: hsl(200, 100%, 83%);
+	--col-btn-primary-text: hsl(200, 100%, 20%);
+	--col-btn-primary-text-dark: hsl(200, 100%, 10%);
+	--col-btn-border: black;
+	--col-btn-danger-background: hsl(var(--col-danger-hue), 100%, 83%);
+	--col-btn-danger-text: black;
+	--col-btn-danger-text-dark: black;
+	--col-btn-primary-background-dark: hsl(200, 100%, 73%);
+	--col-btn-danger-background-dark: hsl(var(--col-danger-hue), 100% 73%); */
+}
+
+.btn {
+	border: 1px solid var(--col-btn-border);
+	border-radius: 0.5rem;
+	padding: 0.5rem 1rem;
+	font-size: 1.2rem;
+	font-family: "Montserrat", sans-serif;
+	text-decoration: none;
+	text-align: center;
+}
+
+.btn-row {
+	display: flex;
+	align-items: flex-start;
+}
+
+.btn-row > * {
+	margin-left: 1rem;
+}
+
+.btn-row > *:first-child {
+	margin-left: 0;
+}
+
+.btn-primary {
+	color: var(--col-btn-primary-text);
+	background-color: var(--col-btn-primary-background);
+}
+
+.btn-primary:hover {
+	color: var(--col-btn-primary-text-dark);
+	background-color: var(--col-btn-primary-background-dark);
+}
+
+.btn-danger {
+	color: var(--col-btn-danger-text);
+	background-color: var(--col-btn-danger-background);
+}
+
+.btn-danger:hover {
+	color: var(--col-btn-danger-text-dark);
+	background-color: var(--col-btn-danger-background-dark);
+}

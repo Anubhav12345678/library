@@ -1,0 +1,7 @@
+:root {
+	--color-background-dark: hsl(200, 100%, 8%);
+	--color-background-light: hsl(200, 100%, 16%);
+	--color-text-light: hsl(200, 100%, 87%);
+	--col-danger-hue-offset: 180;
+	--col-danger-hue: calc(200 - var(--col-danger-hue-offset));
+}

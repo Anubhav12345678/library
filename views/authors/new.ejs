@@ -1,10 +1,12 @@
-<h1> Creating new author</h1>
+<h1 class="page-header"> Creating new author</h1>
 <br>
 <form  action="/authors" method="POST">
    <%- include('_form_fields') %>
    <br><br>
-   <a href="/authors"> Cancel </a>&nbsp;&nbsp;&nbsp;
-   <button type="submit" name="submit">Create</button>
+   <div class="form-row form-row-end btn-row">
+      <a class="btn btn-danger" href="/authors"> Cancel </a>&nbsp;&nbsp;&nbsp;
+      <button class="btn btn-primary" type="submit" name="submit">Create</button>
+   </div>
 </form>
 
 

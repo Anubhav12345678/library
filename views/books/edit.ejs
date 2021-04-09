@@ -1,10 +1,12 @@
-<h1> Edit Book</h1>
+<h1 class="page-header"> Edit Book</h1>
 <br>
 <form  action="/books/<%= book.id %>?_method=PUT" method="POST">
    <%- include('_form_fields') %>
    <br><br>
-   <a href="/books"> Cancel </a>&nbsp;&nbsp;&nbsp;
-   <button type="submit" name="submit">Update</button>
+   <div class="form-row form-row-end btn-row">
+      <a class="btn btn-danger" href="/books"> Cancel </a>&nbsp;&nbsp;&nbsp;
+      <button type="submit" class="btn btn-primary " name="submit">Update</button>
+   </div>
 </form>
 
 

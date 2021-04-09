@@ -1,47 +1,55 @@
-<div>
-<label>Title</label>
-<input type="text" name="title" value="<%= book.title %>"> &nbsp;&nbsp;&nbsp;&nbsp;
-</div>
-<div>
-<label>Author</label> 
-<!-- this is going to be different as thois is a select box -->
-<select name="author">
-    <% authors.forEach(author=> { %>
-        <!-- here we are gonna create all of our optiions -->
-        <!-- lebel is what the user will see -->
-        <!-- we are not doing with book.author.id because this author field is actually an id as we defined in the books model
-             in models -->
-             <!-- none of the authors are currently selected so it will select the first author -->
-        <% if ( author.id === book.author ) { %>
-          <option selected label="<%= author.name %>" value="<%= author.id %>">
-        <% } else {  %>
-          <option label="<%= author.name %>" value="<%= author.id %>">
-        <% } %>
+<div class="form-row">
+    <div class="form-item">
+        <label>Title</label>
+        <input type="text" name="title" value="<%= book.title %>"> &nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+    <div class="form-item">
+            <label>Author</label> 
+            <!-- this is going to be different as thois is a select box -->
+            <select name="author">
+            <% authors.forEach(author=> { %>
+                <!-- here we are gonna create all of our optiions -->
+                <!-- lebel is what the user will see -->
+                <!-- we are not doing with book.author.id because this author field is actually an id as we defined in the books model
+                    in models -->
+                    <!-- none of the authors are currently selected so it will select the first author -->
+                <% if ( author.id === book.author ) { %>
+                <option selected label="<%= author.name %>" value="<%= author.id %>">
+                <% } else {  %>
+                <option label="<%= author.name %>" value="<%= author.id %>">
+                <% } %>
 
-    <% }) %>
-</select>
+            <% }) %>
+            </select>
+    </div>
 </div>
-<div>
-<label>Publish Date</label>
-<!-- publishDate is not in correct format so we do little bit js -->
-<!-- toISOString converts the string which has time inside of it  -->
-   <!-- toISOString will give '2021-04-12T12:13' so we are splittingg on the T variable andd then taking the first element of the array  -->
-<input type="Date" name="publishDate" 
-       value="<%= book.publishDate == null ? '' : book.publishDate.toISOString().split('T')[0] %>">
+<div class="form-row">
+    <div class="form-item">
+    <label>Publish Date</label>
+    <!-- publishDate is not in correct format so we do little bit js -->
+    <!-- toISOString converts the string which has time inside of it  -->
+    <!-- toISOString will give '2021-04-12T12:13' so we are splittingg on the T variable andd then taking the first element of the array  -->
+    <input type="Date" name="publishDate" 
+        value="<%= book.publishDate == null ? '' : book.publishDate.toISOString().split('T')[0] %>">
+    </div>
+    <div class="form-item">
+        <label>Page Count</label>
+        <!-- we can never have a book less than 1 pages long -->
+        <input type="number" name="pageCount" min="1" value="<%= book.pageCount %>">
+    </div>
 </div>
-<div>
-    <label>Page Count</label>
-    <!-- we can never have a book less than 1 pages long -->
-    <input type="number" name="pageCount" min="1" value="<%= book.pageCount %>">
+<div class="form-row">
+    <div class="form-item form-item-no-grow">
+            <label>Cover Image</label>
+            <!-- we can never have a book less than 1 pages long -->
+            <!-- This is the actual cover file image as just appose to file image -->
+            <!-- file images don't allow a default value -->
+            <input type="file" name="cover" class="filepond">
+    </div>
+    <div class="form-item">
+        <label>Description</label>
+        <textarea name="description"> <%= book.description %> </textarea>
+    </div>
 </div>
-<div>
-    <label>Cover Image</label>
-    <!-- we can never have a book less than 1 pages long -->
-    <!-- This is the actual cover file image as just appose to file image -->
-    <!-- file images don't allow a default value -->
-    <input type="file" name="cover" class="filepond">
-</div>
-<div>
-    <label>Description</label>
-    <textarea name="description"> <%= book.description %> </textarea>
-</div>
+
+
